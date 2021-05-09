@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutt_gifs/constants/darkLightTheme.dart';
-
+import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
 import 'home.dart';
 
 void main() async {
-  // WidgetsFlutterBinding.ensureInitialized();
-  // SystemChrome.setEnabledSystemUIOverlays(
-  //     [SystemUiOverlay.bottom, SystemUiOverlay.top]);
+  await DotEnv.load(fileName: ".env");
   runApp(MyApp());
 }
 
@@ -37,7 +34,8 @@ class _DarkLightThemeState extends State<DarkLightTheme> {
           appBar: AppBar(
             backgroundColor: Colors.transparent,
             bottomOpacity: 0.0,
-            elevation: 0.0,
+            elevation: 1.0,
+            leading: Image.asset('assets/logo.png'),
             actions: [
               Icon(_light ? Icons.lightbulb : Icons.lightbulb_outline),
               Switch(
