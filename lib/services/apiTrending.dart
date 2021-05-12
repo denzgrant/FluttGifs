@@ -1,19 +1,26 @@
-import 'package:flutt_gifs/services/networking.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutt_gifs/models/trendingInfo.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:flutt_gifs/constants/urlStrings.dart';
 
-const trendingGifsURL = 'https://api.giphy.com/v1/gifs/trending';
+class TrendingInfo {
+  Future<TrendingGifsModel> getTrendingGifs() async {
+    var client = http.Client();
+    var trendingGifsModel;
 
-var apiKey = env["APIKEY"];
+    try {
+      var response = await client.get(Uri.parse(UrlStrings.trendingUrl));
+      if (response.statusCode == 200) {
+        var jsonString = response.body;
+        var jsonMap = json.decode(jsonString);
+        // print(jsonMap);
 
-class TrendingGifsModel {
-  Future<dynamic> getTrendingGifs() async {
-    var url = '$trendingGifsURL?api_key=$apiKey&limit=25&rating=g';
-    NetworkHelper networkHelper = NetworkHelper(url);
-
-    var trendingGifsData = await networkHelper.getData();
-    print(trendingGifsData);
-    dynamic gifUrl = trendingGifsData['data']['url'].toString();
-    print(gifUrl);
-    return trendingGifsData;
+        trendingGifsModel = TrendingGifsModel.fromJson(jsonMap);
+        print(trendingGifsModel);
+      }
+    } catch (Exception) {
+      return trendingGifsModel;
+    }
+    return trendingGifsModel;
   }
 }
