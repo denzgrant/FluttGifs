@@ -1,5 +1,8 @@
+import 'dart:math';
+
 import 'package:flutt_gifs/services/apiTrending.dart';
 import 'package:flutt_gifs/models/trendingInfo.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
@@ -20,76 +23,63 @@ class _HomeState extends State<Home> {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            pinned: true,
+            floating: true,
             backgroundColor: Colors.black,
+            expandedHeight: 200,
             flexibleSpace: FlexibleSpaceBar(
               background: Padding(
-                padding: const EdgeInsets.only(top: 30.0),
+                padding: const EdgeInsets.all(24.0),
                 child: Image.asset(
                   'assets/logo.png',
-                  scale: 0.8,
                 ),
               ),
             ),
-            leading: IconButton(
-              icon: Icon(Icons.menu, color: Colors.white, size: 30),
-            ),
-            expandedHeight: 300.0,
           ),
-          SliverToBoxAdapter(
-            child: Container(
-              height: 50,
-              color: Colors.grey,
-              width: MediaQuery.of(context).size.width,
-              child: Text("Search Goes here"),
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (BuildContext context, int index) {
+                return Container(
+                  height: MediaQuery.of(context).size.height,
+                  child: FutureBuilder<TrendingGifsModel>(
+                    future: _trendingGifsModel,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return ListView.builder(
+                            itemCount: snapshot.data.data.length,
+                            itemBuilder: (context, index) {
+                              var gifs = snapshot.data.data[index];
+                              return Card(
+                                elevation: 50.0,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(1.0),
+                                      child: Container(
+                                        height:
+                                            MediaQuery.of(context).size.height /
+                                                2,
+                                        color: Colors.accents[Random()
+                                            .nextInt(Colors.accents.length)],
+                                        child: Image.network(
+                                          gifs.url,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            });
+                      } else {
+                        return Center(child: CircularProgressIndicator());
+                      }
+                    },
+                  ),
+                );
+              },
+              childCount: 1,
             ),
           ),
-          SliverGrid(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 1,
-            ),
-            delegate:
-                SliverChildBuilderDelegate((BuildContext context, int index) {
-              return Container(
-                child: FutureBuilder<TrendingGifsModel>(
-                  future: _trendingGifsModel,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return ListView.builder(
-                          itemCount: snapshot.data.data.length,
-                          itemBuilder: (context, index) {
-                            var gifs = snapshot.data.data[index];
-                            return Container(
-                              height: 400,
-                              width: 300,
-                              child: Row(
-                                children: [
-                                  Image.network(gifs.url),
-                                ],
-                              ),
-                            );
-                          });
-                    }
-                    return Center(child: CircularProgressIndicator());
-                  },
-                ),
-              );
-            }),
-          ),
-          // SliverGrid.count(
-          //   crossAxisCount: 2,
-          //   children: [
-          //     Container(color: Colors.red, height: 150.0),
-          //     Container(color: Colors.purple, height: 150.0),
-          //     Container(color: Colors.green, height: 150.0),
-          //     Container(color: Colors.orange, height: 150.0),
-          //     Container(color: Colors.yellow, height: 150.0),
-          //     Container(color: Colors.pink, height: 150.0),
-          //     Container(color: Colors.cyan, height: 150.0),
-          //     Container(color: Colors.indigo, height: 150.0),
-          //     Container(color: Colors.blue, height: 150.0),
-          //   ],
-          // ),
         ],
       ),
     );
