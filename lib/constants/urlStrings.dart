@@ -5,5 +5,5 @@ const trendingGifsURL = 'https://api.giphy.com/v1/gifs/trending';
 
 class UrlStrings {
   static String trendingUrl =
-      '$trendingGifsURL?api_key=$apiKey&limit=20&rating=g';
+      '$trendingGifsURL?api_key=$apiKey&limit=10&rating=g';
 }
