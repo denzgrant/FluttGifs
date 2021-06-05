@@ -22,6 +22,7 @@ dev_dependencies:
   flutter_launcher_icons:
   flutter_spinkit:
   flutter_dotenv:
+  glass_kit: ^2.0.0
 
 
 flutter_native_splash:

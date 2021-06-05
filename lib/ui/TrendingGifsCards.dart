@@ -1,5 +1,5 @@
-import 'dart:math';
-
+import 'package:glass_kit/glass_kit.dart';
+import 'package:flutt_gifs/constants/colors.dart';
 import 'package:flutt_gifs/models/trendingInfo.dart';
 import 'package:flutt_gifs/services/apiTrending.dart';
 import 'package:flutter/cupertino.dart';
@@ -34,24 +34,44 @@ class _ImageCardState extends State<TrendingGifsCards> {
                 itemBuilder: (context, index) {
                   var gifs = snapshot.data.data[index];
                   return Padding(
-                    padding: const EdgeInsets.all(6.0),
+                    padding: const EdgeInsets.all(8.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Container(
+                        GlassContainer.clearGlass(
+                          width: MediaQuery.of(context).size.width,
                           height: MediaQuery.of(context).size.height / 2,
-                          child: Card(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15.0),
-                            ),
-                            color: Colors.accents[
-                                    Random().nextInt(Colors.accents.length)]
-                                .withOpacity(0.5),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Image.network(
-                                gifs.url,
-                              ),
+                          color: Colors.pinkAccent,
+                          gradient: LinearGradient(
+                            colors: [
+                              Colors.white.withOpacity(0.40),
+                              Colors.white.withOpacity(0.10)
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          borderGradient: LinearGradient(
+                            colors: [
+                              randomColors().withOpacity(.4),
+                              randomColors().withOpacity(.1),
+                              randomColors().withOpacity(0.05),
+                              randomColors().withOpacity(0.6)
+                            ],
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomRight,
+                            stops: [0.0, 0.39, 0.40, 1.0],
+                          ),
+                          blur: 50,
+                          borderWidth: 5,
+                          elevation: 1.0,
+                          shadowColor: randomColors().withOpacity(.9),
+                          alignment: Alignment.center,
+                          margin: EdgeInsets.all(1.0),
+                          padding: EdgeInsets.all(8.0),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Image.network(
+                              gifs.url,
                             ),
                           ),
                         ),
@@ -61,7 +81,7 @@ class _ImageCardState extends State<TrendingGifsCards> {
                 });
           } else {
             return Transform.scale(
-              scale: 0.2,
+              scale: 0.5,
               child: CircularProgressIndicator(),
             );
           }

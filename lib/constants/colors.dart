@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 
 class GiphyColors {
@@ -10,4 +11,8 @@ class GiphyColors {
   GiphyColors({this.data});
 
   List<GiphyColors> data;
+}
+
+MaterialAccentColor randomColors() {
+  return Colors.accents[Random().nextInt(Colors.accents.length)];
 }
